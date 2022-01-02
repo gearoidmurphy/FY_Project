@@ -5,7 +5,22 @@ import matplotlib.pyplot as plt
 from numpy.lib.function_base import average
 from scipy import ndimage
 from datetime import datetime
+import smtplib, ssl
+import sqlite
+import colorDetection
+import cv2 
 
+camera = cv2.VideoCapture(0)
+
+port = 465  # For SSL
+smtp_server = "smtp.gmail.com"
+sender_email = "lamenessdetection@gmail.com"  # Enter your address
+receiver_email = "gearoidmurphy2000@gmail.com"  # Enter receiver address
+password = 'cowscows12'
+
+context = ssl.create_default_context()
+
+counter = 0 
 
 i2c = busio.I2C(board.SCL, board.SDA, frequency=400000) # setup I2C
 mlx = adafruit_mlx90640.MLX90640(i2c) # begin MLX90640 with I2C comm
@@ -44,6 +59,7 @@ def plot_update():
     ax.draw_artist(therm1) # draw new thermal image
     fig.canvas.blit(ax.bbox) # draw background
     fig.canvas.flush_events() # show the new image
+    #counter=counter+1
     #fig.show()
     return
 
@@ -53,7 +69,7 @@ def calcAverage():
     for h in range(24):
         for w in range(32):
             t = frame[h * 32 + w]
-            if t > 21:
+            if t > 24:
                 hightemps = hightemps+t
                 counter = counter + 1
     aveageOfHightemps = hightemps/counter
@@ -63,6 +79,7 @@ t_array = []
 while True:
     t1 = time.monotonic() # for determining frame rate
     try:
+        counter=counter+1
         plot_update() # update plot
         averageTemp = calcAverage()
     except:
@@ -73,7 +90,28 @@ while True:
         t_array = t_array[1:] # recent times for frame rate approx
     print('Frame Rate: {0:2.1f}fps'.format(len(t_array)/np.sum(t_array)))
     print('Average foot Temperature: '+ str(averageTemp))
+    print(counter)
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    
     file.write(dt_string+'\t'+'Average Temperature: ' + str(averageTemp)+'\n')
     file.flush()
+    if counter >= 40:
+        tagnumber = colorDetection.getTagNumberbyColor(camera)
+        print(str(tagnumber))
+        with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+            server.login(sender_email, password)
+            message = """\
+Subject: Lameness Reading Automated
+
+Hi There,
+
+The folowing reading was taken at """+dt_string+""" :
+                Average Temperature: """+str(averageTemp)+"""
+                """
+            server.sendmail(sender_email, receiver_email, message)
+            print('Sucessfully Sent')
+            
+        id = sqlite.getNextID()
+        sqlite.addToDatabase(str(id),str(tagnumber),str(averageTemp),dt_string)
+        counter = 0

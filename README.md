@@ -1,7 +1,7 @@
 # Welcome to My Final Year Project Page
-
-![logo2](https://user-images.githubusercontent.com/47002243/160114856-eda5784d-6882-434c-ab8d-2087f3b3f36a.jpg)
-
+<p align="center" width="100%">
+    <img src="https://user-images.githubusercontent.com/47002243/160114856-eda5784d-6882-434c-ab8d-2087f3b3f36a.jpg"> 
+</p>
 ## Using Wireless and Thermal Imaging Technology for Lameness Detection
 
 [Repository](https://github.com/gearoidmurphy/FY_Project)
@@ -30,36 +30,51 @@ The aims of this project are as follows:
 ### Methodology 
 For the development of this project I've decided to go with the Agile approach. This is conducted through ‘sprints’. At the beginning of the semester I set out my goals and due dates for these sprints, each one allowing for flexibility. 
 
+## Feasibility
+### Market
+The potential market for this device is huge as many of the options available use more expensive camera set ups or use devices that are on each animal which is accurate but more costly on the farm as more likely to break. “Lameness in dairy cows is a worldwide problem with herd prevalence estimates ranging from 8 % in New Zealand , 22 % in Chile, 32 to 37 % in the UK to 55 % in North America.”(Somers et al., 2015) Lameness is a huge cost on farms as treatment drugs are costly but the aim of my device is to catch it early which can allow for prevention methods such as foot baths, changing their environment and getting a hoof pairer to improve there hoof health. “Thermal Imaging was successfully used in various applications of human and veterinary medicine. In farm animals, IRT cameras have been used to test for early detection of estrus (Hurnik et al., 1985), for mastitis (Berry et al., 2003), for detection of viral diarrhea infections in calves (Schaefer et al., 2007), for cattle infected with foot-and-mouth disease (Rainwater-Lovett et al., 2009), and for evaluating the milking process (Kunc et al., 2007).”(Alsaaod and Büscher, 2012)
+
+### Unique Selling Point 
+One of the Key USPs of the project is that it’s a singular device unlike anything currently being sold on the market as most devices use motion detection to record the animals activity and then predict lameness with this data. This works great but in real terms it won’t be implemented in many farms as it’s too costly with the design I have created. A farm can use the point of entry into the milking parlour and place the device there. As each cow enters it can record and detect an increase in hoof temperature which is a sign of lameness and alert the farmer to it which will allow the farmer to treat it before it becomes a problem.
+
+The Another Key USP is that it detects early so in most cases the farmer will be able to use preventive measures rather than actual treatments which is another cost cutting measure that the device gives.
+
+## Key Technologies
+
+### Python
+I will be using python as the main language in this project as it is the language I am most comfortable with and yet still haven’t tried anything in this area of the language. I believe it’s the best choice for the project as it contains many image processing libraries such as Scikit-image or OpenCV. I will only be using python to process and send the results which makes it Ideal as I will be using Android to present them to the user.
+SQLite
+The database I have chosen to use is SQlite as it does not use up  RAM and CPU when not being utilised. As it's a serverless database which is self contained in a file. Since the device won't be storing huge amounts of data it seems like the perfect choice for the early stages of this project.
+
+### Docker
+The reason I have chosen to use docker in this project is that I would like to simplify the setup process on the device. It would also be beneficial in the development of the application as I can run and test the whole program without a Raspberry PI with Dummy Data of the thermal camera. I got a lot of experience with docker on my work placement and it is a tool that I feel can be beneficial to the project. By containerizing the program I will make it very simple for others to set up the device. All that will be needed to be done is changes to the configuration file  and installing the camera.
+
+### Grafana
+Grafana is an interactive web application that can analyse data sets. I plan to use Grafana to analyse the data of the entire herd and graph herd lameness over a given period of time. I will also use it to implement graphs of individual animals. This will allow the user and I to get a better understanding of temperature trends and make the application more accurate. 
+
+### MQTT
+I will be using MQTT to transfer the data between the device and the user interface. I got a lot of experience with MQTT protocols from my work experience. It will allow me to send live results to the user through TCP/IP the reason I chose it is that it can be run on any device as it has low system requirements and all it needs to operate is a internet connection for the project I will most likely create a broker on an AWS/OpenStack Instance which allow for scalability of users.
+
+### Android
+I would like to create a mobile app for the user as most users will be farmers on the go and I feel a webpage would be very difficult and extra work for the user to get the results. I haven’t had any experience with Android yet but I do have a module this year. The reason I chose Android is that I know there are a lot of resources available for it and with the knowledge I learned this year I can definitely create a decent user interface. If we look at the users which are mostly farmers most will use android phones.
 
 
-### Markdown
+## Hardware
+### Raspberry Pi 4
+For the Project I plan to use Raspberry Pi as I found that a lot of the low-costing thermal cameras out there where compatible with the Raspberry Pi’s so it was an easy choice but As for which raspberry pi I owned 3 types Pi Zero, Pi 3B+ and Pi 4 because the application has a lot of image processing I felt that a pi Zero Just wouldn’t have enough Processing Power. Looking at the remaining I had to take into account the RAM and processing power and the Pi 4 has the 3B+ bet for the task the device will be doing. I think that Pi 4 would be the more suitable option with more processing power and RAM. 
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+### Adafruit MLX90640 Thermal Camera Breakout
+I researched a lot of different thermal cameras and I found that many didn’t have great output as their accuracy was very bad, some being higher than +-10°C which would make huge differences in my device. After a while of searching I found the MLX90640 which has an accuracy of +-2°C which is one of the best I found without going into the premium thermal cameras. I also found documentation on installing the drivers which was an issue I saw a lot of users had when it came to installing certain cameras.
 
-```markdown
-Syntax highlighted code block
+“The MLX90640 contains a 24x32 array of IR thermal sensors. This allows it to return an array of 768 individual infrared temperature readings. It can measure temperatures ranging from -40°C to 300°C with an accuracy of +- 2°C (in the 0-100°C range). With a maximum frame rate of 16 Hz.”(Adafruit MLX90640 IR Thermal Camera, 2021) This is perfect for the application I am making as the range in which I will be looking at is 0-20°C.
 
-# Header 1
-## Header 2
-### Header 3
+<img width="325" alt="Screenshot 2022-03-28 at 13 16 07" src="https://user-images.githubusercontent.com/47002243/160395859-52262c33-bb33-44a4-ac34-43847780e0ee.png">
 
-- Bulleted
-- List
 
-1. Numbered
-2. List
+### Radio Frequency Identification(RFID)
+I intend to use a RFID-RC522 board as a way to identify the animal during the process. I will use the reader to get the animal tag number from the cows EID tag that is given to them as a calf. “The tags are activated when they pass within the transmission field of a reader. The tag then absorbs power from the reader and returns its unique 15 digit number back to the reader” (What are EID / RFID Ear Tags, 2022)
+As you can see above the code given to the reader is printed on the tag the parts of will be used are the tenth digit to the fifthteeth digit this is the end of the animals tag number. This seems like the most plausible way of identifying each animal efficiently with the full system up and running.
 
-**Bold** and _Italic_ and `Code` text
+<img width="649" alt="Screenshot 2022-03-28 at 13 14 18" src="https://user-images.githubusercontent.com/47002243/160395564-11aff67a-c323-445a-8001-7b2843d364b5.png">
 
-[Link](url) and ![Image](src)
-```
-
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/gearoidmurphy/FY_Project/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+<img width="369" alt="Screenshot 2022-03-28 at 13 15 20" src="https://user-images.githubusercontent.com/47002243/160395713-4bd14441-592a-4505-acbc-fb8acd00b725.png">

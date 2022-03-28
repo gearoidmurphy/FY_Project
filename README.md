@@ -2,6 +2,8 @@
 <p align="center" width="100%">
     <img src="https://user-images.githubusercontent.com/47002243/160114856-eda5784d-6882-434c-ab8d-2087f3b3f36a.jpg"> 
 </p>
+
+
 ## Using Wireless and Thermal Imaging Technology for Lameness Detection
 
 [Repository](https://github.com/gearoidmurphy/FY_Project)

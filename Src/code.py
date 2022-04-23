@@ -2,13 +2,17 @@ import time,board,busio
 import numpy as np
 import adafruit_mlx90640
 import matplotlib.pyplot as plt
-from numpy.lib.function_base import average
+import numpy
 from scipy import ndimage
 from datetime import datetime
 import smtplib, ssl
 import sqlite
-import colorDetection
+# import colorDetection
 import cv2 
+import paho.mqtt.client as mqtt
+import RFID_read
+
+
 
 camera = cv2.VideoCapture(0)
 
@@ -19,6 +23,14 @@ receiver_email = "gearoidmurphy2000@gmail.com"  # Enter receiver address
 password = 'cowscows12'
 
 context = ssl.create_default_context()
+
+broker="ec2-54-74-124-135.eu-west-1.compute.amazonaws.com"
+def on_connect(client, userdata, flags, rc):
+    print("Connected")
+
+client = mqtt.Client()
+client.on_connect = on_connect
+client.connect(broker, 1883, 60)
 
 counter = 0 
 
@@ -66,6 +78,7 @@ def plot_update():
 def calcAverage():
     hightemps = 0
     counter = 0
+    # print(frame)
     for h in range(24):
         for w in range(32):
             t = frame[h * 32 + w]
@@ -96,22 +109,25 @@ while True:
     
     file.write(dt_string+'\t'+'Average Temperature: ' + str(averageTemp)+'\n')
     file.flush()
-    if counter >= 40:
-        tagnumber = colorDetection.getTagNumberbyColor(camera)
-        print(str(tagnumber))
-        with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
-            server.login(sender_email, password)
-            message = """\
-Subject: Lameness Reading Automated
+    if counter >= 20:
+        tagnumber = 0
+        tagnumber = RFID_read.getTagNumber()
+        if averageTemp > 28:
+            print(str(tagnumber))
+            client.publish(str(tagnumber), payload=averageTemp)
+    #         with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+    #             server.login(sender_email, password)
+    #             message = """\
+    # Subject: Lameness Reading Automated 
 
-Hi There,
+    # Hi There,
 
-The folowing reading was taken at """+dt_string+""" :
-                Average Temperature: """+str(averageTemp)+"""
-                """
-            server.sendmail(sender_email, receiver_email, message)
-            print('Sucessfully Sent')
-            
-        id = sqlite.getNextID()
-        sqlite.addToDatabase(str(id),str(tagnumber),str(averageTemp),dt_string)
-        counter = 0
+    # The folowing reading was taken at """+dt_string+""" :
+    #                 Average Temperature: """+str(averageTemp)+"""
+    #                 """
+    #             server.sendmail(sender_email, receiver_email, message)
+    #             print('Sucessfully Sent')
+                
+            # id = sqlite.getNextID()
+            # sqlite.addToDatabase(str(id),str(tagnumber),str(averageTemp),dt_string)
+            counter = 0

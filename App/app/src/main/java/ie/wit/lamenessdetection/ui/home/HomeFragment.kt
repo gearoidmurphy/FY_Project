@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.CookieManager
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.TextView
@@ -55,8 +56,7 @@ class HomeFragment : Fragment() {
 //            }
 //        }
 
-//        myWebView.loadUrl("http://ec2-54-74-124-135.eu-west-1.compute.amazonaws.com:3000/d/RjpRrtw7k/herd-dashboard?orgId=1&from=1650683132401&to=1650726332401&viewPanel=4")
-        myWebView.settings.javaScriptEnabled = true
+//           myWebView.settings.javaScriptEnabled = true
         myWebView.settings.loadWithOverviewMode = true
         myWebView.settings.loadsImagesAutomatically = true
         myWebView.settings.useWideViewPort = true
@@ -64,6 +64,10 @@ class HomeFragment : Fragment() {
         myWebView.settings.allowContentAccess = true
         myWebView.settings.setAppCacheEnabled(true)
         myWebView.settings.javaScriptCanOpenWindowsAutomatically = true
+        myWebView.settings.setJavaScriptEnabled(true);
+//        myWebView.settings.setPluginsEnabled(true);
+        myWebView.settings.setBuiltInZoomControls(true);
+        myWebView.settings.setPluginState(WebSettings.PluginState.ON);
         myWebView.settings.userAgentString = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.137 Safari/537.36")
         //myWebView.webChromeClient = WebChromeClient()
 
@@ -71,8 +75,9 @@ class HomeFragment : Fragment() {
         CookieManager.getInstance().acceptThirdPartyCookies(myWebView)
 
         val path =
-            "<iframe src=\"http://ec2-54-74-124-135.eu-west-1.compute.amazonaws.com:3000/d-solo/RjpRrtw7k/herd-dashboard?orgId=1&from=1650712856279&to=1650756056279&panelId=4\" width=\"1200\" height=\"600\" frameborder=\"0\"></iframe>"
-        myWebView.loadData(path, "text/html", "utf-8")
+            "<iframe src=\"https://snapshots-origin.grafana.net/dashboard-solo/snapshot/cQ3QADpWOBXjUMeMfMFPPXHqwHqRD03l?orgId=2&from=1650408585203&to=1651013385204&panelId=2\" width=\"450\" height=\"200\" frameborder=\"0\"></iframe>"
+        myWebView.loadUrl("http://ec2-54-74-124-135.eu-west-1.compute.amazonaws.com:3000/d/RjpRrtw7k/herd-dashboard?orgId=1&from=1650803654275&to=1650805548253&viewPanel=4")
+//        myWebView.loadData(path, "text/html", "utf-8")
     }
 
     override fun onDestroyView() {

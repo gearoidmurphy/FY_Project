@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.CookieManager
+import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -60,7 +61,7 @@ class DashboardFragment : Fragment() {
         myWebView.settings.setAppCacheEnabled(true)
         myWebView.settings.javaScriptCanOpenWindowsAutomatically = true
         myWebView.settings.userAgentString = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.137 Safari/537.36")
-        //myWebView.webChromeClient = WebChromeClient()
+        myWebView.webChromeClient = WebChromeClient()
 
         myWebView2.settings.javaScriptEnabled = true
         myWebView2.settings.loadWithOverviewMode = true
@@ -71,18 +72,21 @@ class DashboardFragment : Fragment() {
         myWebView2.settings.setAppCacheEnabled(true)
         myWebView2.settings.javaScriptCanOpenWindowsAutomatically = true
         myWebView2.settings.userAgentString = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.137 Safari/537.36")
+        myWebView2.webChromeClient = WebChromeClient()
 
         CookieManager.getInstance().setAcceptCookie(true)
         CookieManager.getInstance().acceptThirdPartyCookies(myWebView)
         CookieManager.getInstance().acceptThirdPartyCookies(myWebView2)
 
         val path =
-            "<iframe src=\"http://ec2-54-74-124-135.eu-west-1.compute.amazonaws.com:3000/d-solo/RjpRrtw7k/herd-dashboard?orgId=1&from=1650712856279&to=1650756056279&panelId=4\" width=\"1200\" height=\"600\" frameborder=\"0\"></iframe>"
+            "<iframe src=\"http://ec2-54-74-124-135.eu-west-1.compute.amazonaws.com:3000/d-solo/RjpRrtw7k/herd-dashboard?orgId=1&from=1650803654275&to=1650805548253&panelId=2\" width=\"450\" height=\"200\" frameborder=\"0\"></iframe>"
         val path2 =
-            "<iframe src=\"http://ec2-54-74-124-135.eu-west-1.compute.amazonaws.com:3000/d-solo/RjpRrtw7k/herd-dashboard?orgId=1&from=1650712856279&to=1650756056279&panelId=4\" width=\"1200\" height=\"600\" frameborder=\"0\"></iframe>"
+            "<iframe src=\"http://ec2-54-74-124-135.eu-west-1.compute.amazonaws.com:3000/d-solo/RjpRrtw7k/herd-dashboard?orgId=1&from=1650803654275&to=1650805548253&panelId=3\" width=\"450\" height=\"200\" frameborder=\"0\"></iframe>"
 
-        myWebView.loadData(path, "text/html", "utf-8")
-        myWebView2.loadData(path2, "text/html", "utf-8")
+//        myWebView.loadData(path, "text/html", "utf-8")
+//        myWebView2.loadData(path2, "text/html", "utf-8")
+        myWebView.loadUrl("http://ec2-54-74-124-135.eu-west-1.compute.amazonaws.com:3000/d/RjpRrtw7k/herd-dashboard?orgId=1&from=1650803686736&to=1650805530417&viewPanel=2")
+        myWebView2.loadUrl("http://ec2-54-74-124-135.eu-west-1.compute.amazonaws.com:3000/d/RjpRrtw7k/herd-dashboard?orgId=1&from=1650803686736&to=1650805530417&viewPanel=3")
     }
 
     override fun onDestroyView() {
